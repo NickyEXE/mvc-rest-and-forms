@@ -1,137 +1,59 @@
-# Intro to Active Record Relationships
+# Intro to REST, MVC, and Forms
 
-## Key Links
 
-- [Association Basics](https://guides.rubyonrails.org/association_basics.html)
-- [has_many Documentation](https://api.rubyonrails.org/v6.1.3.1/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_many)
-- [belongs_to Documentation](https://apidock.com/rails/ActiveRecord/Associations/ClassMethods/belongs_to)
-- [Walkthrough on More Advanced Macro Use](https://www.theodinproject.com/paths/full-stack-ruby-on-rails/courses/ruby-on-rails/lessons/active-record-associations)
+## MVC - Model/View/Controller
 
-## Setting up relationships
+The Model-View-Controller pattern provides separation of concerns where groups of files have specific jobs and interact with each other in very defined ways
+- Models - encapsulate the data specific to our application and define the logic and computation that manipulate and process that data
+- Views - user-facing part of a web application - this is the only part of the app that the user interacts with directly
+- Controllers - intermediary between our models and our views
 
-1. Make sure the side of your relationship that `belongs_to` something else has a column in its table to hold the relationship.
-```ruby
-  create_table :clients do |t|
-    t.string :name
-    t.integer :firm_id
-  end
+A common analogy is that the Model is the Chef, the Controller is the Waiter, and the View is the menu.
+
+This is reflected in a proper Sinatra app's file structure:
+
+```
+├── Gemfile
+├── README.md
+├── app
+│   ├── controllers
+│   │   └── application_controller.rb
+│   ├── models
+│   │   └── model.rb
+│   └── views
+│       └── index.erb
+├── config
+│   └── environment.rb
+├── config.ru
+├── public
+│   └── stylesheets
+└── spec
+   ├── controllers
+   ├── features
+   ├── models
+   └── spec_helper.rb
+
 ```
 
-2. Make sure that both models inherit from ActiveRecord::Base
-```ruby
-  class Firm < ActiveRecord::Base
-    #...
-  end
+## RESTful Routing
 
-  class Client < ActiveRecord::Base
-    #...
-  end
-```
+In a dissertation in 2000, Roy Fielding outlined how a well designed website behaved, with heavy reliance on the idea that the types of data that website served could be represented as "resources", and that there were specific things we normally wanted to do to each resource, namely: CREATE, READ, UPDATE, and DELETE.
 
-3. Add your has_many and belongs_to
-```ruby
-  class Firm < ActiveRecord::Base
-    has_many :clients
-  end
+- Representational State Transfer provides a way of mapping HTTP verbs ( get, post, put, delete) and CRUD actions (create, read, update, delete) together
+- When we navigate from one page of our app to another, we are making a state transition, i.e. we are moving to the next state of our application
+- It is a conventional pattern to follow when structuring different routes for interacting with the server
+- Following RESTful convention makes it very clear what type of request each controller action will be handling
 
-  class Client < ActiveRecord::Base
-    belongs_to :firm
-  end
-```
+There are seven RESTful routes, broken down as Create (C), Read (R), Update (U), and Delete (D) actions:
+- New: GET to display a form to create a new item (C)
+- Create: POST to create a form, usually ends with a redirect (C)
+- Index: GET to display a list of many items (R)
+- Show: GET to display one item (R)
+- Edit: GET to display a form to edit an existing item (U)
+- Update: PATCH/PUT to update the item in the database, usually ends with a redirect (U)
+- Delete: DELETE to delete an item in a database, usually ends with a redireect (D)
 
-## Has Many Methods (from the Documentation):
+![RESTful Routes for Blogs](https://miro.medium.com/max/1750/1*M0hdLsgbzelOFuq-1BVH-g.png)
+[Stolen from this Blog](https://medium.com/@shubhangirajagrawal/the-7-restful-routes-a8e84201f206)
 
-For a firm that has many clients (remember that a `#` denotes an instance methods. All of these would be called on an instance of a firm.)
-
-Many of these methods have equivalents on the belongs_to side. Check out the documentation for a list.
-
-- `Firm#clients` (similar to Client.where(firm_id: id))
-- `Firm#clients<<`
-- `Firm#clients.delete`
-- `Firm#clients.destroy`
-- `Firm#clients=`
-- `Firm#client_ids`
-- `Firm#client_ids=`
-- `Firm#clients.clear`
-- `Firm#clients.empty?` (similar to firm.clients.size == 0)
-- `Firm#clients.size` (similar to Client.count "firm_id = #{id}")
-- `Firm#clients.find` (similar to Client.where(firm_id: id).find(id))
-- `Firm#clients.exists?(name: 'ACME')` (similar to Client.exists?(name: 'ACME', firm_id: firm.id))
-- `Firm#clients.build` (similar to Client.new(firm_id: id))
-- `Firm#clients.create` (similar to c = Client.new(firm_id: id); c.save; c)
-- `Firm#clients.create!` (similar to c = Client.new(firm_id: id); c.save!)
-- `Firm#clients.reload`
-
-## Breaking Better: A Breaking Bad Support Group For Breaking Buds
-
-### To use this app
-
-First run `bundle install`.
-
-Then, start the app with `ruby run.rb`
-
-### Implementing Bundler (Optional in Project)
-
-Bundler allows you to denote which gems the app uses and lock your specific version. Then, it gives others a command to automatically install those gems. It's a great gem version tracker for large apps.
-
-Start by using `bundle init` and then you can add gems to the gemfile.
-
-Include the bundler by adding `require 'bundler'` and `Bundler.require` to the top of your code.
-
-### TTY-Prompt (Optional in Project)
-
-Because `gets.strip` is so 1982, get up to 1985 with: https://github.com/piotrmurach/tty-prompt
-
-### Rake (Optional in Project)
-
-Rake allows you to define ruby tasks to initiate from the command line. To use it, first make sure you have Rake installed with `gem install rake`.
-
-After this, create a file called `Rakefile` (no .rb necessary) in your root directory. After this, rake tasks can be defined like this:
-
-```ruby
-task :say_hi do
-  puts "hi"
-end
-```
-
-Once you've done this, you can run that ruby code by typing `rake say_hi` into the console while in the project's directory.
-
-If you would like to have one rake task call another rake task (say, to require your environment file before opening up a pry session), you can use the following syntax:
-
-```ruby
-task :say_bye => :say_hi do
-  puts "bye"
-end
-```
-
-Running `rake say_bye` in the console will now puts "hi" and then puts "bye".
-
-### Creating a run file with bin
-
-Using bin is a common method to allow us to run our executable without calling `ruby` in our terminal.
-
-Properly set up, it will allow you to run your code by simply writing `bin/run` in your terminal.
-
-To make your run file a bin file, create a directory called `bin` in your root directory. Inside it, create a file with the name that you want to use to run it. For example, if I create a file named `batman`, I will eventually be able to run it with `bin/batman`. You do not need to add a `.rb`.
-
-A bin file should start with a shebang statement to let your computer know what language to use to run it. It is usually this: `#!/usr/bin/env ruby`
-
-Afterwards, treat it as a regular ruby file. Any ruby code in the bin file with a proper shebang statement should be runable from your main directory as `bin/batman` (or whatever you named the file.)
-
-If your VSCode doesn't recognize it as Ruby and you want to see your normal color highlighting, hit the portion that says something like "Plain Text" at the bottom right corner of the screen.
-
-If, for some reason, you run `bin/[YOUR FILENAME]` and get "Permission denied", you can give it write access with the following code in your terminal:
-```chmod +x bin/[YOUR FILENAME]```
-
-Alternatively, you can run it by calling `ruby bin/[YOUR FILENAME]`.
-
-### Deliverables
-We're going to create an app to allow Users to give supportive comments to different Breaking Bad Characters.
-
-<!-- > Create an API service class
-> Create a character class
-> Create a CLI app that populates the characters, then allows us to see all their names
-> Allow us to see more details on each character -->
-> Allow us to add a message to the character
-> Allow us to login
-> Associate messages with user
+If you ever are curious what the RESTful routes are for a specific model, use this: http://www.restular.com/
