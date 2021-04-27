@@ -22,3 +22,11 @@ gem "sinatra-activerecord", "~> 2.0"
 gem "sqlite3", "~> 1.4"
 
 gem "rake", "~> 13.0"
+
+gem "sinatra", "~> 2.1"
+
+gem "rack", "~> 2.2"
+
+gem "shotgun", "~> 0.9.2"
+
+gem "require_all", "~> 3.0"

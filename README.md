@@ -1,6 +1,5 @@
 # Intro to REST, MVC, and Forms
 
-
 ## MVC - Model/View/Controller
 
 The Model-View-Controller pattern provides separation of concerns where groups of files have specific jobs and interact with each other in very defined ways
@@ -79,4 +78,13 @@ end
 class MovieController < ApplicationController
  ...
 end
+```
+
+Include in config.ru like this:
+
+```ruby
+#config.ru
+
+use MovieController
+run ApplicationController
 ```
