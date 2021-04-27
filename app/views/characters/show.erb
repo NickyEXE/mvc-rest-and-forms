@@ -1,0 +1,16 @@
+<div class="character">
+<h1>Meet <%= @character.name %></h1>
+<img src=<%= @character.img %> alt=<%=@character.name%>/>
+<p>Birthday: <%=@character.birthday%></p>
+<p>Occupation: <%=@character.occupation%></p>
+<p>Status: <%=@character.status%></p>
+<p>Actor: <%=@character.actor%></p>
+<p>Nickname: <%=@character.nickname%></p>
+
+</div>
+
+<div class=messages>
+  <% @character.messages.each do |message| %>
+    <div class="message"><%="#{message.user.username} says: #{message.content}" %></div>
+  <% end %>
+</div>
