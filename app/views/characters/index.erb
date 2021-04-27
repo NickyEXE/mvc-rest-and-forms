@@ -1,0 +1,8 @@
+<div class="cards">
+<% @characters.each do |character| %>
+  <div class="card">
+    <p><a href="/characters/<%=character.id%>"><%= character.name %></a></p>
+    <img src=<%= character.img %> alt= <%=character.name%>/>
+  </div>
+<% end %>
+</div>
