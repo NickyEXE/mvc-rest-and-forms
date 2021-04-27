@@ -57,3 +57,26 @@ There are seven RESTful routes, broken down as Create (C), Read (R), Update (U),
 [Stolen from this Blog](https://medium.com/@shubhangirajagrawal/the-7-restful-routes-a8e84201f206)
 
 If you ever are curious what the RESTful routes are for a specific model, use this: http://www.restular.com/
+
+## Setting Up Your App
+
+All controllers other than ApplicationController should have the resource pluralized, and inherit from ApplicationController rather than Sinatra::Base
+
+```ruby
+
+class ApplicationController < Sinatra::Base
+  configure do
+    set :public_folder, 'public'
+    set :views, 'app/views'
+  end
+
+  ...
+
+end
+```
+
+```ruby
+class MovieController < ApplicationController
+ ...
+end
+```
