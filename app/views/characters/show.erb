@@ -6,7 +6,11 @@
 <p>Status: <%=@character.status%></p>
 <p>Actor: <%=@character.actor%></p>
 <p>Nickname: <%=@character.nickname%></p>
-
+<a href="/characters/<%= @character.id %>/edit">Edit <%=@character.name%>'s information.</a>
+<form action="/characters/<%= @character.id %>" method="post">
+  <input type="hidden" name="_method" value="delete">
+  <input type="submit" value="Delete <%= @character.name %>">
+</form>
 </div>
 
 <div class=messages>

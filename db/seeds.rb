@@ -7,7 +7,7 @@ BreakingBadAPI.new.response.each do |character_hash|
     img: character_hash["img"],
     occupation: character_hash["occupation"].join(", "),
     status: character_hash["status"],
-    actor: character_hash["actor"],
+    actor: character_hash["portrayed"],
     nickname: character_hash["nickname"]
   )
 end
